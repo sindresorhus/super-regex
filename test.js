@@ -19,8 +19,8 @@ test('firstMatch', t => {
 });
 
 test('matches', t => {
-	t.deepEqual(matches(fixtureRegex(), fixtureString, {timeout: 10}), []);
-	t.is(matches(fixtureRegex(), 'v1.1.3', {timeout: 10})[0].match, '1.1.3');
-	t.is(matches(/^v\d+/g, fixtureString, {timeout: 1000})[0].match, 'v1');
-	t.is(matches(/^v\d+/g, fixtureString)[0].match, 'v1');
+	t.deepEqual([...matches(fixtureRegex(), fixtureString, {timeout: 10})], []);
+	t.is([...matches(fixtureRegex(), 'v1.1.3', {timeout: 10})][0].match, '1.1.3');
+	t.is([...matches(/^v\d+/g, fixtureString, {timeout: 1000})][0].match, 'v1');
+	t.is([...matches(/^v\d+/g, fixtureString)][0].match, 'v1');
 });

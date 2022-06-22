@@ -40,14 +40,28 @@ export function firstMatch(regex, string, {timeout} = {}) {
 }
 
 export function matches(regex, string, {timeout} = {}) {
-	try {
-		return functionTimeout(() => [...string.matchAll(regex)], {timeout})()
-			.map(result => resultToMatch(result));
-	} catch (error) {
-		if (isTimeoutError(error)) {
-			return [];
-		}
+	return {
+		* [Symbol.iterator]() {
+			try {
+				const matches = string.matchAll(regex); // The regex is only executed when iterated over.
+				const nextMatch = functionTimeout(() => matches.next(), {timeout}); // `matches.next` must be called within an arrow function so that it doesn't loose its context.
 
-		throw error;
-	}
+				while (true) {
+					const {value, done} = nextMatch();
+
+					if (done) {
+						break;
+					}
+
+					yield resultToMatch(value);
+				}
+			} catch (error) {
+				if (isTimeoutError(error)) {
+					return [];
+				}
+
+				throw error;
+			}
+		},
+	};
 }

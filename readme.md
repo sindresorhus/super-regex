@@ -40,7 +40,7 @@ If the regex takes longer to match than the given timeout, it returns `undefined
 
 ### matches(regex, string, options?)
 
-Returns an array of `Match`'es.
+Returns an iterable of `Match`'es.
 
 If the regex takes longer to match than the given timeout, it returns an empty array.
 
