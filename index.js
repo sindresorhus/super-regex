@@ -56,11 +56,9 @@ export function matches(regex, string, {timeout} = {}) {
 					yield resultToMatch(value);
 				}
 			} catch (error) {
-				if (isTimeoutError(error)) {
-					return [];
+				if (!isTimeoutError(error)) {
+					throw error;
 				}
-
-				throw error;
 			}
 		},
 	};
