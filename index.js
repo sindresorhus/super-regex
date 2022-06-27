@@ -47,11 +47,11 @@ export function matches(regex, string, {timeout = Number.POSITIVE_INFINITY, matc
 				const matches = string.matchAll(regex); // The regex is only executed when iterated over.
 
 				while (true) {
-					const nextMatch = functionTimeout(() => matches.next(), {timeout: (timeout !== Number.POSITIVE_INFINITY && matchTimeout !== Number.POSITIVE_INFINITY) ? Math.min(timeout, matchTimeout) : undefined}); // `matches.next` must be called within an arrow function so that it doesn't loose its context.
+					const nextMatch = functionTimeout(() => matches.next(), {timeout: (timeout !== Number.POSITIVE_INFINITY || matchTimeout !== Number.POSITIVE_INFINITY) ? Math.min(timeout, matchTimeout) : undefined}); // `matches.next` must be called within an arrow function so that it doesn't loose its context.
 
 					const end = timeSpan();
 					const {value, done} = nextMatch();
-					timeout -= end();
+					timeout -= Math.ceil(end());
 
 					if (done) {
 						break;
