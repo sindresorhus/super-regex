@@ -40,7 +40,7 @@ If the regex takes longer to match than the given timeout, it returns `undefined
 
 ### matches(regex, string, options?)
 
-Returns an array of `Match`'es.
+Returns an iterable of `Match`'es.
 
 If the regex takes longer to match than the given timeout, it returns an empty array.
 
@@ -55,6 +55,14 @@ Type: `object`
 Type: `number` *(integer)*
 
 The time in milliseconds to wait before timing out.
+
+##### matchTimeout?
+
+Type: `number` *(integer)*
+
+Only works in `matches()`.
+
+The time in milliseconds to wait before timing out when searching for each match.
 
 ### Match
 

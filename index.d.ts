@@ -8,6 +8,13 @@ export type Match = {
 	input: string;
 };
 
+export interface MatchesOptions extends Options {
+	/**
+	The time in milliseconds to wait before timing out when searching for each match.
+	*/
+	readonly matchTimeout?: number;
+}
+
 /**
 Returns a boolean for whether the given `regex` matches the given `string`.
 
@@ -39,7 +46,7 @@ console.log(firstMatch(/\d+/, getUserInput(), {timeout: 1000}));
 export function firstMatch(regex: RegExp, string: string, options?: Options): Match | undefined;
 
 /**
-Returns an array of matches.
+Returns an iterable of matches.
 
 If the regex takes longer to match than the given timeout, it returns an empty array.
 
@@ -49,9 +56,9 @@ __The `regex` must have the `/g` flag.__
 ```
 import {matches} from 'super-regex';
 
-console.log(matches(/\d+/, getUserInput(), {timeout: 1000}));
+console.log([...matches(/\d+/, getUserInput(), {timeout: 1000})]);
 ```
 */
-export function matches(regex: RegExp, string: string, options?: Options): Match[];
+export function matches(regex: RegExp, string: string, options?: MatchesOptions): Iterable<Match>;
 
 export {Options} from 'function-timeout';
