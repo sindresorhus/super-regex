@@ -8,6 +8,13 @@ export type Match = {
 	input: string;
 };
 
+export interface MatchesOptions extends Options {
+	/**
+	The time in milliseconds to wait before timing out when searching for each match.
+	*/
+	readonly matchTimeout?: number;
+}
+
 /**
 Returns a boolean for whether the given `regex` matches the given `string`.
 
@@ -52,6 +59,6 @@ import {matches} from 'super-regex';
 console.log([...matches(/\d+/, getUserInput(), {timeout: 1000})]);
 ```
 */
-export function matches(regex: RegExp, string: string, options?: Options): Iterable<Match>;
+export function matches(regex: RegExp, string: string, options?: MatchesOptions): Iterable<Match>;
 
 export {Options} from 'function-timeout';

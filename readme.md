@@ -56,6 +56,14 @@ Type: `number` *(integer)*
 
 The time in milliseconds to wait before timing out.
 
+##### matchTimeout?
+
+Type: `number` *(integer)*
+
+Only works in `matches()`.
+
+The time in milliseconds to wait before timing out when searching for each match.
+
 ### Match
 
 ```ts
