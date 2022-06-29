@@ -42,7 +42,7 @@ export function firstMatch(regex, string, {timeout} = {}) {
 
 export function matches(regex, string, {timeout = Number.POSITIVE_INFINITY, matchTimeout = Number.POSITIVE_INFINITY} = {}) {
 	if (!regex.global) {
-		throw new Error('RegExp must be global; otherwise use firstMatch instead');
+		throw new Error('The regex must have the global flag, otherwise, use `firstMatch()` instead');
 	}
 
 	return {
