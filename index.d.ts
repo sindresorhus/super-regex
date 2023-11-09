@@ -1,4 +1,4 @@
-import {Options} from 'function-timeout';
+import {type Options} from 'function-timeout';
 
 export type Match = {
 	match: string;
@@ -8,12 +8,12 @@ export type Match = {
 	input: string;
 };
 
-export interface MatchesOptions extends Options {
+export type MatchesOptions = {
 	/**
 	The time in milliseconds to wait before timing out when searching for each match.
 	*/
 	readonly matchTimeout?: number;
-}
+} & Options;
 
 /**
 Returns a boolean for whether the given `regex` matches the given `string`.

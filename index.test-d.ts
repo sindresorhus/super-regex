@@ -1,5 +1,5 @@
 import {expectType} from 'tsd';
-import {isMatch, firstMatch, matches, Match} from './index.js';
+import {isMatch, firstMatch, matches, type Match} from './index.js';
 
 expectType<boolean>(isMatch(/\d/, '1', {timeout: 1000}));
 expectType<Match | undefined>(firstMatch(/\d/, '1', {timeout: 1000}));
