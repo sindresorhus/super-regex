@@ -9,9 +9,11 @@ const resultToMatch = result => ({
 	input: result.input,
 });
 
+const context = {};
+
 export function isMatch(regex, string, {timeout} = {}) {
 	try {
-		return functionTimeout(() => structuredClone(regex).test(string), {timeout})();
+		return functionTimeout(() => structuredClone(regex).test(string), {timeout, context})();
 	} catch (error) {
 		if (isTimeoutError(error)) {
 			return false;
@@ -23,7 +25,7 @@ export function isMatch(regex, string, {timeout} = {}) {
 
 export function firstMatch(regex, string, {timeout} = {}) {
 	try {
-		const result = functionTimeout(() => structuredClone(regex).exec(string), {timeout})();
+		const result = functionTimeout(() => structuredClone(regex).exec(string), {timeout, context})();
 
 		if (result === null) {
 			return;
@@ -52,6 +54,7 @@ export function matches(regex, string, {timeout = Number.POSITIVE_INFINITY, matc
 				while (true) {
 					// `matches.next` must be called within an arrow function so that it doesn't loose its context.
 					const nextMatch = functionTimeout(() => matches.next(), {
+						context,
 						timeout: (timeout !== Number.POSITIVE_INFINITY || matchTimeout !== Number.POSITIVE_INFINITY) ? Math.min(timeout, matchTimeout) : undefined,
 					});
 
