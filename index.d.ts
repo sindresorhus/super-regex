@@ -1,4 +1,4 @@
-import {type Options} from 'function-timeout';
+import {type Options as Options_} from 'function-timeout';
 
 export type Match = {
 	match: string;
@@ -7,6 +7,22 @@ export type Match = {
 	namedGroups: Record<string, string>;
 	input: string;
 };
+
+export type Options = {
+	/**
+	Throw a timeout error instead of returning a default value when the timeout is reached.
+
+	This lets you distinguish between “no match” and “timeout”.
+
+	@default false
+
+	By default, when a timeout occurs:
+	- `isMatch()` returns `false`
+	- `firstMatch()` returns `undefined`
+	- `matches()` returns an empty array
+	*/
+	readonly throwOnTimeout?: boolean;
+} & Options_;
 
 export type MatchesOptions = {
 	/**
@@ -60,5 +76,3 @@ console.log([...matches(/\d+/, getUserInput(), {timeout: 1000})]);
 ```
 */
 export function matches(regex: RegExp, string: string, options?: MatchesOptions): Iterable<Match>;
-
-export {Options} from 'function-timeout';

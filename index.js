@@ -11,11 +11,11 @@ const resultToMatch = result => ({
 
 const context = {};
 
-export function isMatch(regex, string, {timeout} = {}) {
+export function isMatch(regex, string, {timeout, throwOnTimeout} = {}) {
 	try {
 		return functionTimeout(() => structuredClone(regex).test(string), {timeout, context})();
 	} catch (error) {
-		if (isTimeoutError(error)) {
+		if (isTimeoutError(error) && !throwOnTimeout) {
 			return false;
 		}
 
@@ -23,7 +23,7 @@ export function isMatch(regex, string, {timeout} = {}) {
 	}
 }
 
-export function firstMatch(regex, string, {timeout} = {}) {
+export function firstMatch(regex, string, {timeout, throwOnTimeout} = {}) {
 	try {
 		const result = functionTimeout(() => structuredClone(regex).exec(string), {timeout, context})();
 
@@ -33,7 +33,7 @@ export function firstMatch(regex, string, {timeout} = {}) {
 
 		return resultToMatch(result);
 	} catch (error) {
-		if (isTimeoutError(error)) {
+		if (isTimeoutError(error) && !throwOnTimeout) {
 			return;
 		}
 
@@ -41,7 +41,7 @@ export function firstMatch(regex, string, {timeout} = {}) {
 	}
 }
 
-export function matches(regex, string, {timeout = Number.POSITIVE_INFINITY, matchTimeout = Number.POSITIVE_INFINITY} = {}) {
+export function matches(regex, string, {timeout = Number.POSITIVE_INFINITY, matchTimeout = Number.POSITIVE_INFINITY, throwOnTimeout} = {}) {
 	if (!regex.global) {
 		throw new Error('The regex must have the global flag, otherwise, use `firstMatch()` instead');
 	}
@@ -69,9 +69,11 @@ export function matches(regex, string, {timeout = Number.POSITIVE_INFINITY, matc
 					yield resultToMatch(value);
 				}
 			} catch (error) {
-				if (!isTimeoutError(error)) {
-					throw error;
+				if (isTimeoutError(error) && !throwOnTimeout) {
+					return;
 				}
+
+				throw error;
 			}
 		},
 	};

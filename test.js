@@ -9,6 +9,7 @@ test('isMatch', t => {
 	t.true(isMatch(fixtureRegex(), 'v1.1.3', {timeout: 10}));
 	t.true(isMatch(/^v\d+/, fixtureString, {timeout: 1000}));
 	t.true(isMatch(/^v\d+/, fixtureString));
+	t.throws(() => isMatch(fixtureRegex(), fixtureString, {timeout: 10, throwOnTimeout: true}));
 });
 
 test('firstMatch', t => {
@@ -16,6 +17,7 @@ test('firstMatch', t => {
 	t.is(firstMatch(fixtureRegex(), 'v1.1.3', {timeout: 10}).match, '1.1.3');
 	t.is(firstMatch(/^v\d+/g, fixtureString, {timeout: 1000}).match, 'v1');
 	t.is(firstMatch(/^v\d+/g, fixtureString).match, 'v1');
+	t.throws(() => firstMatch(fixtureRegex(), fixtureString, {timeout: 10, throwOnTimeout: true}));
 });
 
 test('matches', t => {
@@ -24,4 +26,5 @@ test('matches', t => {
 	t.is([...matches(/^v\d+/g, fixtureString, {timeout: 1000})][0].match, 'v1');
 	t.is([...matches(/^v\d+/g, fixtureString, {timeout: 1000, matchTimeout: 1000})][0].match, 'v1');
 	t.is([...matches(/^v\d+/g, fixtureString)][0].match, 'v1');
+	t.throws(() => [...matches(fixtureRegex(), fixtureString, {timeout: 10, throwOnTimeout: true})]);
 });

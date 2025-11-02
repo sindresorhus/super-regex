@@ -56,6 +56,20 @@ Type: `number` *(integer)*
 
 The time in milliseconds to wait before timing out.
 
+##### throwOnTimeout?
+
+Type: `boolean`\
+Default: `false`
+
+Throw a timeout error instead of returning a default value when the timeout is reached.
+
+This lets you distinguish between “no match” and “timeout”.
+
+By default, when a timeout occurs:
+- `isMatch()` returns `false`
+- `firstMatch()` returns `undefined`
+- `matches()` returns an empty array
+
 ##### matchTimeout?
 
 Type: `number` *(integer)*
