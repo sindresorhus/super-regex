@@ -6,7 +6,9 @@ This can be used to prevent [ReDoS vulnerabilities](https://en.wikipedia.org/wik
 
 This package also has a better API than the built-in regular expression methods. For example, none of the methods mutate the regex.
 
-The timeout only works in Node.js. In the browser, it will simply not time out.
+**Synchronous methods** (`isMatch`, `firstMatch`, `matches`) use a timeout mechanism that only works in Node.js. In the browser, they will not time out.
+
+**Asynchronous methods** (`isMatchAsync`, `firstMatchAsync`, `matchesAsync`) run the regex in a worker thread and support timeout in both Node.js and browsers. They are especially useful for preventing ReDoS attacks in browser environments and for non-blocking execution in servers.
 
 ## Install
 
@@ -20,6 +22,12 @@ npm install super-regex
 import {isMatch} from 'super-regex';
 
 console.log(isMatch(/\d+/, getUserInput(), {timeout: 1000}));
+```
+
+```js
+import {isMatchAsync} from 'super-regex';
+
+console.log(await isMatchAsync(/\d+/, getUserInput(), {timeout: 1000}));
 ```
 
 ## API
@@ -46,6 +54,54 @@ If the regex takes longer to match than the given timeout, it returns an empty a
 
 **The `regex` must have the `/g` flag.**
 
+### isMatchAsync(regex, string, options?)
+
+Returns a promise that resolves to a boolean for whether the given `regex` matches the given `string`.
+
+If the regex takes longer to match than the given timeout, it returns `false`.
+
+This method runs the regex in a worker thread, which allows it to time out in both Node.js and browsers. This is especially useful for preventing ReDoS attacks in browser environments.
+
+*This method is similar to [`RegExp#test`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test), but differs in that the given `regex` is [never mutated, even when it has the `/g` flag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test#using_test_on_a_regex_with_the_global_flag).*
+
+```js
+import {isMatchAsync} from 'super-regex';
+
+console.log(await isMatchAsync(/\d+/, getUserInput(), {timeout: 1000}));
+```
+
+### firstMatchAsync(regex, string, options?)
+
+Returns a promise that resolves to the first match or `undefined` if there was no match.
+
+If the regex takes longer to match than the given timeout, it returns `undefined`.
+
+This method runs the regex in a worker thread, which allows it to time out in both Node.js and browsers. This is especially useful for preventing ReDoS attacks in browser environments.
+
+```js
+import {firstMatchAsync} from 'super-regex';
+
+console.log(await firstMatchAsync(/\d+/, getUserInput(), {timeout: 1000}));
+```
+
+### matchesAsync(regex, string, options?)
+
+Returns an async iterable of matches.
+
+If the regex takes longer to match than the given timeout, it returns an empty iterable.
+
+This method runs the regex in a worker thread, which allows it to time out in both Node.js and browsers. This is especially useful for preventing ReDoS attacks in browser environments.
+
+**The `regex` must have the `/g` flag.**
+
+```js
+import {matchesAsync} from 'super-regex';
+
+for await (const match of matchesAsync(/\d+/g, getUserInput(), {timeout: 1000})) {
+	console.log(match);
+}
+```
+
 #### options
 
 Type: `object`
@@ -69,6 +125,9 @@ By default, when a timeout occurs:
 - `isMatch()` returns `false`
 - `firstMatch()` returns `undefined`
 - `matches()` returns an empty array
+- `isMatchAsync()` returns `false`
+- `firstMatchAsync()` returns `undefined`
+- `matchesAsync()` returns an empty iterable
 
 ##### matchTimeout?
 

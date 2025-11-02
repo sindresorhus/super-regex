@@ -20,7 +20,7 @@
 		"node": ">=18"
 	},
 	"scripts": {
-		"test": "xo && ava && tsd",
+		"test": "xo && node --test && tsd",
 		"benchmark": "node benchmark/index.js"
 	},
 	"files": [
@@ -41,14 +41,18 @@
 		"redos",
 		"security",
 		"script",
-		"execute"
+		"execute",
+		"async",
+		"asynchronous",
+		"worker",
+		"non-blocking"
 	],
 	"dependencies": {
 		"function-timeout": "^1.0.1",
+		"make-asynchronous": "^1.0.1",
 		"time-span": "^5.1.0"
 	},
 	"devDependencies": {
-		"ava": "^6.1.2",
 		"tsd": "^0.31.0",
 		"xo": "^0.58.0"
 	}
